@@ -27,21 +27,31 @@ struct ConquistaDetalheView: View {
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color("roxoPrimario"), lineWidth: 5)
                         )
-                        .padding(.horizontal, 20)
+                        .shadow(color: .black.opacity(0.10), radius: 10, y: 4)
 
                     Text(conquista.titulo)
                         .font(.title2.bold())
                         .foregroundColor(Color("fontePrincipal"))
                         .multilineTextAlignment(.center)
-                        .padding(.horizontal, 16)
-
-                    Text(conquista.descricao)
-                        .font(.body)
-                        .foregroundColor(Color("fontePrincipal"))
-                        .multilineTextAlignment(.center)
                         .padding(.horizontal, 20)
 
-                    Spacer(minLength: 40)
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Descrição")
+                            .font(.headline)
+                            .foregroundColor(Color("roxoPrimario"))
+
+                        Text(conquista.descricao)
+                            .font(.body)
+                            .foregroundColor(Color("fontePrincipal"))
+                            .multilineTextAlignment(.leading)
+                    }
+                    .padding(20)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.white.opacity(0.15))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .padding(.horizontal, 20)
+
+                    Spacer(minLength: 50)
                 }
                 .padding(.top, 40)
             }
