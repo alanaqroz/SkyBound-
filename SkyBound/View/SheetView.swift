@@ -55,7 +55,7 @@ struct SheetView: View {
                     .cornerRadius(20)
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color("roxoSheet"), lineWidth: 4)
+                            .stroke(Color("roxoBottunSalvar"), lineWidth: 4)
                     )
                     .padding(.horizontal, 16)
 
@@ -132,7 +132,7 @@ struct SheetView: View {
                         .font(.body.weight(.semibold))
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color("roxoSheet"))
+                        .background(Color("roxoBottunSalvar"))
                         .cornerRadius(30)
                 }
                 .padding(.horizontal, 80)

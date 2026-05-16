@@ -14,7 +14,7 @@ struct ContentView: View {
         if hasSeenIntro {
             HomeView()
         } else {
-            IntroView()   // a tela que você mostrou na imagem
+            IntroView()   
         }
     }
 }
