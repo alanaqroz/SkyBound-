@@ -42,10 +42,46 @@ struct HomeView: View {
                     }
                     .padding(.top, 10)
 
+                    // Chips de filtro por categoria
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            // Chip "Todas"
+                            Button {
+                                vm.categoriaSelecionada = nil
+                            } label: {
+                                Text("Todas")
+                                    .font(.subheadline.weight(.semibold))
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 8)
+                                    .background(vm.categoriaSelecionada == nil ? Color("azulSecundario") : Color("azulSecundario").opacity(0.25))
+                                    .foregroundColor(vm.categoriaSelecionada == nil ? .white : Color("azulSecundario"))
+                                    .clipShape(Capsule())
+                            }
+
+                            ForEach(Categoria.allCases, id: \.self) { categoria in
+                                Button {
+                                    vm.categoriaSelecionada = vm.categoriaSelecionada == categoria ? nil : categoria
+                                } label: {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: categoria.icone)
+                                            .font(.caption)
+                                        Text(categoria.rawValue)
+                                            .font(.subheadline.weight(.semibold))
+                                    }
+                                    .padding(.horizontal, 14)
+                                    .padding(.vertical, 8)
+                                    .background(vm.categoriaSelecionada == categoria ? categoria.cor : categoria.cor.opacity(0.25))
+                                    .foregroundColor(vm.categoriaSelecionada == categoria ? .white : categoria.cor)
+                                    .clipShape(Capsule())
+                                }
+                            }
+                        }
+                        .padding(.vertical, 4)
+                    }
+
                     ScrollView {
                         VStack(spacing: 25) {
-
-                            ForEach(conquistas) { conquista in
+                            ForEach(vm.conquistasFiltradas(conquistas)) { conquista in
                                 NavigationLink {
                                     ConquistaDetalheView(conquista: conquista)
                                 } label: {
@@ -61,7 +97,6 @@ struct HomeView: View {
                                 .buttonStyle(.plain)
                             }
                         }
-//                        .padding(.bottom, 50)
                     }
                 }
                 .padding(.horizontal)

@@ -23,16 +23,31 @@ struct CardConquistaView: View {
                 .clipped()
                 .allowsHitTesting(false)
         
-            HStack {
-                Text(conquista.titulo)
-                    .font(.headline)
-                    .foregroundColor(Color("fonteColor"))
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.9)
-                    .accessibilityLabel("Conquista: \(conquista.titulo)")
-                
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(conquista.titulo)
+                        .font(.headline)
+                        .foregroundColor(Color("fonteColor"))
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.9)
+                        .accessibilityLabel("Conquista: \(conquista.titulo)")
+
+                    // Badge de categoria
+                    HStack(spacing: 5) {
+                        Image(systemName: conquista.categoria.icone)
+                            .font(.caption2)
+                        Text(conquista.categoria.rawValue)
+                            .font(.caption.weight(.semibold))
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(conquista.categoria.cor.opacity(0.2))
+                    .foregroundColor(conquista.categoria.cor)
+                    .clipShape(Capsule())
+                }
+
                 Spacer()
-                
+
                 Menu {
                     Button("Editar", action: editar)
                     Button("Excluir", role: .destructive, action: remover)

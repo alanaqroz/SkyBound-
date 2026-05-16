@@ -11,9 +11,15 @@ import SwiftData
 class ConquistasViewModel: ObservableObject {
 
     @Published var context: ModelContext?
+    @Published var categoriaSelecionada: Categoria? = nil
 
     func setContext(_ context: ModelContext) {
         self.context = context
+    }
+
+    func conquistasFiltradas(_ todas: [Conquista]) -> [Conquista] {
+        guard let categoria = categoriaSelecionada else { return todas }
+        return todas.filter { $0.categoria == categoria }
     }
 
     func adicionar(_ conquista: Conquista) {

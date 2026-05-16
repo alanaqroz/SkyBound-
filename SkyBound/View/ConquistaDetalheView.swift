@@ -20,14 +20,16 @@ struct ConquistaDetalheView: View {
 
                     Image(uiImage: conquista.imagem)
                         .resizable()
-                        .scaledToFit()
+                        .scaledToFill()
                         .frame(maxWidth: .infinity)
+                        .frame(height: 260)
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                         .overlay(
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color("roxoPrimario"), lineWidth: 5)
                         )
                         .shadow(color: .black.opacity(0.10), radius: 10, y: 4)
+                        .padding(.horizontal, 20)
 
                     Text(conquista.titulo)
                         .font(.title2.bold())

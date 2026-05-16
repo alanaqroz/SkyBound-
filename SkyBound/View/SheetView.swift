@@ -19,6 +19,7 @@ struct SheetView: View {
 
     @State private var titulo = ""
     @State private var descricao = ""
+    @State private var categoriaSelecionada: Categoria = .pessoal
 
     var body: some View {
         ScrollView {
@@ -74,6 +75,39 @@ struct SheetView: View {
                 }
 
 
+                // Seletor de categoria
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Categoria:")
+                        .font(.body)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.black)
+                        .padding(.horizontal, 16)
+
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            ForEach(Categoria.allCases, id: \.self) { categoria in
+                                Button {
+                                    categoriaSelecionada = categoria
+                                } label: {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: categoria.icone)
+                                            .font(.caption)
+                                        Text(categoria.rawValue)
+                                            .font(.subheadline.weight(.semibold))
+                                    }
+                                    .padding(.horizontal, 14)
+                                    .padding(.vertical, 8)
+                                    .background(categoriaSelecionada == categoria ? categoria.cor : categoria.cor.opacity(0.2))
+                                    .foregroundColor(categoriaSelecionada == categoria ? .white : categoria.cor)
+                                    .clipShape(Capsule())
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 4)
+                    }
+                }
+
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Título:")
                         .font(.body)
@@ -113,13 +147,15 @@ struct SheetView: View {
                     if let editando = conquistaEditavel {
                         editando.titulo = titulo
                         editando.descricao = descricao
+                        editando.categoria = categoriaSelecionada
                         editando.atualizarImagem(imagem)
                         vm.atualizar(editando)
                     } else {
                         let nova = Conquista(
                             titulo: titulo.isEmpty ? "Sem título" : titulo,
                             descricao: descricao,
-                            imagem: imagem
+                            imagem: imagem,
+                            categoria: categoriaSelecionada
                         )
                         vm.adicionar(nova)
                     }
@@ -150,6 +186,7 @@ struct SheetView: View {
                     selectedImage = c.imagem
                     titulo = c.titulo
                     descricao = c.descricao
+                    categoriaSelecionada = c.categoria
                 }
             }
         }
