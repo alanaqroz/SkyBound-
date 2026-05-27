@@ -10,7 +10,9 @@ struct CardConquistaView: View {
     let conquista: Conquista
     let remover: () -> Void
     let editar: () -> Void
-    
+
+    @Environment(\.colorScheme) var colorScheme
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             
@@ -41,8 +43,8 @@ struct CardConquistaView: View {
                     }
                     .padding(.horizontal, 10)
                     .padding(.vertical, 4)
-                    .background(conquista.categoria.cor.opacity(0.2))
-                    .foregroundColor(conquista.categoria.cor)
+                    .background(conquista.categoria.cor)
+                    .foregroundColor(conquista.categoria.corTexto(for: colorScheme))
                     .clipShape(Capsule())
                 }
 
