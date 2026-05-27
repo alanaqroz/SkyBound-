@@ -35,6 +35,12 @@ enum Categoria: String, CaseIterable, Codable {
         case .criatividade: return "paintbrush.fill"
         }
     }
+
+    // Light mode → cores escuras → texto branco
+    // Dark mode  → cores claras  → texto escuro
+    func corTexto(for colorScheme: ColorScheme) -> Color {
+        colorScheme == .dark ? Color(.label).opacity(0.85) : .white
+    }
 }
 
 @Model

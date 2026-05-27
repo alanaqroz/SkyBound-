@@ -13,6 +13,7 @@ struct HomeView: View {
     @Query(sort: \Conquista.titulo) var conquistas: [Conquista]
 
     @StateObject var vm = ConquistasViewModel()
+    @Environment(\.colorScheme) var colorScheme
 
     @State private var mostrarSheet = false
     @State private var conquistaEditando: Conquista?
@@ -71,7 +72,7 @@ struct HomeView: View {
                                     .padding(.horizontal, 14)
                                     .padding(.vertical, 8)
                                     .background(vm.categoriaSelecionada == categoria ? categoria.cor : categoria.cor.opacity(0.25))
-                                    .foregroundColor(vm.categoriaSelecionada == categoria ? .white : categoria.cor)
+                                    .foregroundColor(vm.categoriaSelecionada == categoria ? categoria.corTexto(for: colorScheme) : categoria.cor)
                                     .clipShape(Capsule())
                                 }
                             }
