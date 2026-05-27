@@ -10,53 +10,119 @@ import SwiftUI
 struct ConquistaDetalheView: View {
     let conquista: Conquista
 
+    @Environment(\.colorScheme) var colorScheme
+    @State private var mostrarPreviewCompartilhar = false
+
     var body: some View {
         ZStack {
-            Color("azulPrimario")
-                .ignoresSafeArea()
+            Color("azulPrimario").ignoresSafeArea()
 
             ScrollView {
-                VStack(spacing: 24) {
+                VStack(spacing: 0) {
 
-                    Image(uiImage: conquista.imagem)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 260)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color("roxoPrimario"), lineWidth: 5)
-                        )
-                        .shadow(color: .black.opacity(0.10), radius: 10, y: 4)
-                        .padding(.horizontal, 20)
+                    // Foto hero
+                    ZStack(alignment: .topLeading) {
+                        Image(uiImage: conquista.imagem)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 320)
+                            .clipped()
 
-                    Text(conquista.titulo)
-                        .font(.title2.bold())
-                        .foregroundColor(Color("fontePrincipal"))
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 20)
+                        // Gradiente suavizando embaixo
+                        VStack {
+                            Spacer()
+                            LinearGradient(
+                                colors: [.clear, Color("azulPrimario")],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                            .frame(height: 140)
+                        }
+                        .frame(height: 320)
 
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Descrição")
-                            .font(.headline)
-                            .foregroundColor(Color("roxoPrimario"))
-
-                        Text(conquista.descricao)
-                            .font(.body)
-                            .foregroundColor(Color("fontePrincipal"))
-                            .multilineTextAlignment(.leading)
+                        // Badge de categoria — canto superior esquerdo da foto
+                        HStack(spacing: 6) {
+                            Image(systemName: conquista.categoria.icone)
+                                .font(.caption.weight(.semibold))
+                            Text(conquista.categoria.rawValue)
+                                .font(.caption.weight(.bold))
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 7)
+                        .background(.ultraThinMaterial)
+                        .foregroundColor(conquista.categoria.cor)
+                        .clipShape(Capsule())
+                        .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
+                        .padding(.top, 56)
+                        .padding(.leading, 20)
                     }
-                    .padding(20)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.white.opacity(0.15))
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .padding(.horizontal, 20)
 
-                    Spacer(minLength: 50)
+                    // Conteúdo principal
+                    VStack(alignment: .leading, spacing: 20) {
+
+                        // Título
+                        Text(conquista.titulo)
+                            .font(.title.bold())
+                            .foregroundColor(Color("fontePrincipal"))
+                            .fixedSize(horizontal: false, vertical: true)
+
+                        // Divider na cor da categoria
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(conquista.categoria.cor.opacity(0.4))
+                            .frame(height: 2)
+
+                        // Descrição
+                        if !conquista.descricao.isEmpty {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Label("Descrição", systemImage: "text.alignleft")
+                                    .font(.subheadline.weight(.semibold))
+                                    .foregroundColor(conquista.categoria.cor)
+
+                                Text(conquista.descricao)
+                                    .font(.body)
+                                    .foregroundColor(Color("fontePrincipal").opacity(0.85))
+                                    .lineSpacing(5)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                            .padding(18)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color("fontePrincipal").opacity(0.06))
+                            .clipShape(RoundedRectangle(cornerRadius: 18))
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
+                    .padding(.bottom, 50)
                 }
-                .padding(.top, 40)
+            }
+            .ignoresSafeArea(edges: .top)
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    mostrarPreviewCompartilhar = true
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(conquista.categoria.cor)
+                }
             }
         }
+        .sheet(isPresented: $mostrarPreviewCompartilhar) {
+            PreviewCompartilharSheet(conquista: conquista)
+        }
     }
+}
+
+// UIActivityViewController wrapper
+struct ShareSheet: UIViewControllerRepresentable {
+    let items: [Any]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: items, applicationActivities: nil)
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
